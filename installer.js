@@ -76,7 +76,8 @@ class Installer {
 
     addPluginPath(pluginPath) {
         this.debugLog(`Adding plugin path: ${pluginPath}`);
-        this.pluginPaths.push(pluginPath);
+	this.customArguments += ' -X!AddpluginDir ' + PluginPath;
+        // this.pluginPaths.push(pluginPath);
     }
 
     getProcessArguments(scriptPath) {
@@ -101,20 +102,30 @@ class Installer {
         console.log(`Creating installer for: ${scriptPath}`);
 
         // Include any of the plugins that may have been requested.
-        if (this.pluginPaths.length) {
-            const nsisdir = (await makensis.getSymbolsAsync()).NSISDIR;
-            if (!nsisdir) {
-                throw new Error('Unable to determine NSISDIR. Check makensis -HDRINFO output');
-            }
-            const nsisPluginPath = path.join(nsisdir, 'Plugins');
-            this.debugLog(`Using system Plugins path ${nsisPluginPath}`);
+	// makensis '-X!AddPluginDir path'
+        // if (this.pluginPaths.length) {
+        //     // const nsisdir = (await makensis.getSymbolsAsync()).NSISDIR;
+        //     // if (!nsisdir) {
+        //     //     throw new Error('Unable to determine NSISDIR. Check makensis -HDRINFO output');
+        //     // }
+        //     // const nsisPluginPath = path.join(nsisdir, 'Plugins');
+        //     // this.debugLog(`Using system Plugins path ${nsisPluginPath}`);
+
+	//     this.pluginPaths.join()
+
+	//     const pluginArgs = this.pluginPaths.map(pluginPath -> {
+	// 	const arg = "-x!AddpluginDir " + pluginPath
+	// 	console.log('Including plugin path arg', arg)
+	// 	this.getPto
+	//     });
+
             
-            const copies = this.pluginPaths.map(pluginPath => {
-                console.log('Including plugin path', pluginPath);
-                return copyDirectoryAsync(pluginPath, nsisPluginPath);
-            });
-            await Promise.all(copies);
-        }
+        //     const copies = this.pluginPaths.map(pluginPath => {
+        //         console.log('Including plugin path', pluginPath);
+        //         return copyDirectoryAsync(pluginPath, nsisPluginPath);
+        //     });
+        //     await Promise.all(copies);
+        // }
 
         const args = this.getProcessArguments(scriptPath)
             .join(' ');
